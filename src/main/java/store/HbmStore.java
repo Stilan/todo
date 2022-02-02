@@ -43,11 +43,9 @@ public class HbmStore implements Store {
         }
         Session session = sf.openSession();
         session.beginTransaction();
-        String query = "update model.Item set done =: done where id = :id";
         Item item = findById(id);
         item.setDone(false);
         session.update(item);
-        session.createQuery(query).setParameter("id", id);
         session.getTransaction().commit();
         session.close();
         return true;

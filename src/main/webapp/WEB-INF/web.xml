@@ -23,4 +23,12 @@
     <servlet-name>UpdateServlet</servlet-name>
     <url-pattern>/update</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <servlet-name>DeleteServlet</servlet-name>
+    <servlet-class>servlet.DeleteServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>DeleteServlet</servlet-name>
+    <url-pattern>/delete</url-pattern>
+  </servlet-mapping>
 </web-app>

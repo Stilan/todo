@@ -37,18 +37,16 @@ public class HbmStore implements Store {
     }
 
     @Override
-    public boolean replace(int id) {
-        if (findById(id) == null) {
-            return false;
-        }
+    public Item replace(int id) {
         Session session = sf.openSession();
         session.beginTransaction();
-        Item item = findById(id);
-        item.setDone(false);
-        session.update(item);
+        session.createQuery("update model.Item set done = false where id = :id")
+                .setParameter("id", id)
+                .executeUpdate();
         session.getTransaction().commit();
+        Item item = session.get(Item.class, id);
         session.close();
-        return true;
+        return item;
     }
 
     @Override

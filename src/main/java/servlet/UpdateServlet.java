@@ -18,10 +18,9 @@ public class UpdateServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         int id = Integer.parseInt(req.getParameter("id"));
-        System.out.println(id);
-        System.out.println(HbmStore.instOf().replace(id));
+        Item item = HbmStore.instOf().replace(id);
         OutputStream output = resp.getOutputStream();
-        String json = GSON.toJson(HbmStore.instOf().findById(id));
+        String json = GSON.toJson(item);
         output.write(json.getBytes(StandardCharsets.UTF_8));
         output.flush();
         output.close();

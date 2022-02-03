@@ -72,8 +72,8 @@ public class BdStore implements  Store {
     }
 
     @Override
-    public boolean replace(int id) {
-        return false;
+    public Item replace(int id) {
+        return null;
     }
 
     @Override

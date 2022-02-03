@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface Store {
     Item add(Item item);
-    boolean replace(int id);
+    Item replace(int id);
     boolean delete(int id);
     List<Item> findAll();
     List<Item> findByName(String key);

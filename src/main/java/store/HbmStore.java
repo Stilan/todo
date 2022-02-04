@@ -3,12 +3,14 @@ package store;
 import model.Item;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.query.Query;
 
 import java.util.List;
+import java.util.function.Function;
 
 public class HbmStore implements Store {
 
@@ -26,73 +28,83 @@ public class HbmStore implements Store {
         return Lazy.INST;
     }
 
+    private <T> T tx(final Function<Session, T> command) {
+        final Session session = sf.openSession();
+        final Transaction tx = session.beginTransaction();
+        try {
+            T rsl = command.apply(session);
+            tx.commit();
+            return rsl;
+        } catch (final Exception e) {
+            session.getTransaction().rollback();
+            throw e;
+        } finally {
+            session.close();
+        }
+    }
+
     @Override
     public Item add(Item item) {
-        Session session = sf.openSession();
-        session.beginTransaction();
-        session.save(item);
-        session.getTransaction().commit();
-        session.close();
-        return item;
+        return this.tx(
+                session -> {
+                    session.save(item);
+                    return item;
+                }
+        );
     }
 
     @Override
     public Item replace(int id) {
-        Session session = sf.openSession();
-        session.beginTransaction();
-        session.createQuery("update model.Item set done = false where id = :id")
-                .setParameter("id", id)
-                .executeUpdate();
-        session.getTransaction().commit();
-        Item item = session.get(Item.class, id);
-        session.close();
-        return item;
+        return this.tx(
+               session -> {
+                   session.createQuery("update model.Item set done = false where id = :id")
+                           .setParameter("id", id)
+                           .executeUpdate();
+                   return  session.get(Item.class, id);
+               }
+        );
     }
 
     @Override
     public boolean delete(int id) {
-        if (findById(id) == null) {
-            return false;
-        }
-        Session session = sf.openSession();
-        session.beginTransaction();
-        Item item = new Item();
-        item.setId(id);
-        session.delete(item);
-        session.getTransaction().commit();
-        session.close();
-        return true;
+        return this.tx(
+                session -> {
+                    Item item = new Item();
+                    item.setId(id);
+                    session.delete(item);
+                    if (findById(id) == null) {
+                        return false;
+                    } else {
+                        session.delete(item);
+                        return true;
+                    }
+                }
+        );
     }
 
     @Override
     public List<Item> findAll() {
-        Session session = sf.openSession();
-        session.beginTransaction();
-        List result = session.createQuery("from model.Item").list();
-        session.getTransaction().commit();
-        session.close();
-        return result;
+        return this.tx(
+             session -> session.createQuery("from model.Item").list()
+        );
     }
 
     @Override
     public List<Item> findByName(String key) {
-        Session session = sf.openSession();
-        session.beginTransaction();
-        Query query =  session.createQuery("from model.Item where description = :descriptionKey");
-        query.setParameter("descriptionKey", key);
-        List result = query.list();
-        session.getTransaction().commit();
-        session.close();
-        return result;
+        return this.tx(
+                session -> {
+                    Query query =  session.createQuery("from model.Item where description = :descriptionKey");
+                    query.setParameter("descriptionKey", key);
+                    return query.list();
+                }
+        );
     }
 
     @Override
     public Item findById(int id) {
-        Session session = sf.openSession();
-        session.beginTransaction();
-        Item result = session.get(Item.class, id);
-        session.getTransaction().commit();
-        session.close();
-        return result;
+        return this.tx(
+                session ->
+                     session.get(Item.class, id)
+        );
     }
 }

@@ -1,4 +1,5 @@
-$(document).ready(getList());
+$(document).ready(getList()
+);
 
 function List() {
     $('#tableId thead').empty();
@@ -15,14 +16,16 @@ function List() {
             for (var item of data) {
                 $('#tableId thead').after('<tr id="' + item.id + '"><td>' + '<input type="checkbox" id ="'
                     + item.id + '" onchange="update(id)">'
-                    + '</td><td>' + item.description + '</td></tr>')
+                    + '</td><td>' + item.description + '</td>'
+                    + '<td>' + item.user.name  + '</td></tr>')
             }
         } else {
                 for (var item of data) {
                     if (item.done) {
-                    $('#tableId thead').after('<tr id="' + item.id + '"><td>' + '<input type="checkbox" id ="'
-                        + item.id + '" onchange="update(id)">'
-                        + '</td><td>' + item.description + '</td></tr>')
+                        $('#tableId thead').after('<tr id="' + item.id + '"><td>' + '<input type="checkbox" id ="'
+                            + item.id + '" onchange="update(id)">'
+                            + '</td><td>' + item.description + '</td>'
+                            + '<td>' + item.user.name  + '</td></tr>')
                 }
             }
         }
@@ -41,8 +44,10 @@ function List() {
     }).done(function (data) {
         for (var item of data) {
             if (item.done) {
-                $('#tableId tr:last').after('<tr id="'+ item.id +'"><td>' + '<input type="checkbox" id ="' + item.id + '" onchange="update(id)">'
-                    + '</td><td>' + item.description + '</td></tr>')
+                $('#tableId thead').after('<tr id="' + item.id + '"><td>' + '<input type="checkbox" id ="'
+                    + item.id + '" onchange="update(id)">'
+                    + '</td><td>' + item.description + '</td>'
+                    + '<td>' + item.user.name + '</td></tr>')
             }
         }
     }).fail(function (err) {
@@ -58,16 +63,22 @@ function add() {
         },
         dataType: 'json'
     }).done(function (data) {
-        if (data.done) {
-            $('#tableId tr:last').after('<tr id ="' + data.id + '"><td >' + '<input type="checkbox" id ="' + data.id + '" onchange="update(id)">'
-                + '</td><td>' + data.description + '</td></tr>')
+        if (data.user  != null) {
+            if (data.done) {
+                data.user.name
+                $('#tableId thead').after('<tr id="' + data.id + '"><td>' + '<input type="checkbox" id ="'
+                    + data.id + '" onchange="update(id)">'
+                    + '</td><td>' + data.description + '</td>'
+                    + '<td>' + data.user.name + '</td></tr>')
+            }
+        } else {
+            alert("Зарегистрируйтесь")
         }
     }).fail(function (err) {
         console.log(err);
     })
 }
 function update(id){
-    alert(id)
     $.ajax({
         type: 'POST',
         url: 'http://localhost:8080/todo_war_exploded/update',
@@ -80,9 +91,14 @@ function update(id){
     }).fail(function (err) {
         console.log(err);
 })
-
 }
 
+function addRow() {
+    const name = $('#description').val();
+    if (name === "") {
+        alert($('#description').attr('placeholder'));
+    }
+}
 
 
 

@@ -3,6 +3,7 @@ package servlet;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import model.Item;
+import model.User;
 import store.BdStore;
 import store.HbmStore;
 
@@ -32,7 +33,8 @@ public class TodoServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.setContentType("application/json; charset=utf-8");
-        Item item = new Item(req.getParameter("description"), LocalDateTime.now(), true);
+        User user = (User) req.getSession().getAttribute("user");
+        Item item = new Item(req.getParameter("description"), LocalDateTime.now(), true,  user);
         HbmStore.instOf().add(item);
         OutputStream output = resp.getOutputStream();
         String json = GSON.toJson(item);

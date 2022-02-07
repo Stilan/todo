@@ -1,6 +1,7 @@
 package store;
 
 import model.Item;
+import model.User;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -107,4 +108,27 @@ public class HbmStore implements Store {
                      session.get(Item.class, id)
         );
     }
+
+    @Override
+    public User findByNameUser(String name) {
+          return  this.tx(
+                session -> {
+                    Query query =  session.createQuery("from model.User where name = : nameUser");
+                    query.setParameter("nameUser", name);
+                    return (User) query.uniqueResult();
+                }
+        );
+    }
+
+    @Override
+    public User addUser(User user) {
+        return this.tx(
+                session -> {
+                    session.save(user);
+                    return user;
+                }
+        );
+    }
+
+
 }

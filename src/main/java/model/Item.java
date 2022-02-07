@@ -15,17 +15,31 @@ public class Item {
     private LocalDateTime created = LocalDateTime.now();
     public boolean done;
 
-    public Item(int id, String description, LocalDateTime created, boolean done) {
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Item(int id, String description, LocalDateTime created, boolean done, User user) {
         this.id = id;
         this.description = description;
         this.created = created;
         this.done = done;
+        this.user = user;
     }
 
-    public Item(String description, LocalDateTime created, boolean done) {
+    public Item(String description, LocalDateTime created, boolean done, User user) {
         this.description = description;
         this.created = created;
         this.done = done;
+        this.user = user;
     }
 
     public Item() {

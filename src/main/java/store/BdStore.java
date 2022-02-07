@@ -1,6 +1,7 @@
 package store;
 
 import model.Item;
+import model.User;
 import org.apache.commons.dbcp2.BasicDataSource;
 
 import java.io.BufferedReader;
@@ -83,19 +84,7 @@ public class BdStore implements  Store {
 
     @Override
     public List<Item> findAll() {
-        List<Item> userList = new ArrayList<>();
-        try (Connection cn = pool.getConnection();
-             PreparedStatement ps = cn.prepareStatement("SELECT * FROM item")) {
-            try (ResultSet it = ps.executeQuery()) {
-                while (it.next()) {
-                    userList.add(new Item(it.getInt("id"), it.getString("description"),
-                            it.getTimestamp("created").toLocalDateTime(), it.getBoolean("done")));
-                }
-            }
-        } catch (SQLException th) {
-            th.printStackTrace();
-        }
-        return userList;
+        return null;
     }
 
     @Override
@@ -105,6 +94,16 @@ public class BdStore implements  Store {
 
     @Override
     public Item findById(int id) {
+        return null;
+    }
+
+    @Override
+    public User findByNameUser(String name) {
+        return null;
+    }
+
+    @Override
+    public User addUser(User user) {
         return null;
     }
 }

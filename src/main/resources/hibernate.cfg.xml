@@ -19,6 +19,7 @@
         <property name="hibernate.jdbc.time_zone">GMT+5</property>
 
         <mapping class="model.Item"/>
+        <mapping class="model.User"/>
 
     </session-factory>
 </hibernate-configuration>

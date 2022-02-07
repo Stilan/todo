@@ -31,19 +31,26 @@
         </h3>
     </div>
     <div class="row">
+        <ul class="nav ml-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="login.jsp"> Вход </a>
+            </li>
+        </ul>
+    </div>
+    <div class="row">
         <form>
             <div class="form-group">
                 <label for="description">Задание</label>
                 <input type="text" class="form-control" id="description">
             </div>
-            <button type="button" class="btn btn-success" onclick="add()">Загрузить</button>
+            <button type="button" class="btn btn-success"  onclick="addRow(); add()">Загрузить</button>
         </form>
     </div>
     <br>
     <div class="row">
         <h>Показать все</h>
         <div class="title">
-            <input class="px-2 review-text ml-2 rounded" type="checkbox" id="filter"  onchange="List()">
+            <input class="px-2 review-text ml-2 rounded" type="checkbox" id="filter" onchange="List()">
         </div>
         <table class="table" id="tableId">
             <thead>

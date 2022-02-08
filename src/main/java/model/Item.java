@@ -19,13 +19,6 @@ public class Item {
     @JoinColumn(name = "user_id")
     private User user;
 
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
 
     public Item(int id, String description, LocalDateTime created, boolean done, User user) {
         this.id = id;
@@ -44,6 +37,13 @@ public class Item {
 
     public Item() {
 
+    }
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public int getId() {

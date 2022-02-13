@@ -20,6 +20,7 @@
 
         <mapping class="model.Item"/>
         <mapping class="model.User"/>
+        <mapping class="model.Category"/>
 
     </session-factory>
 </hibernate-configuration>

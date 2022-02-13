@@ -13,6 +13,10 @@ create table users
 drop table users;
 drop table item;
 
-select * from users;
+insert into category(name) values('Дома');
+insert into category(name) values('Работа');
+insert into category(name) values('Разное');
+
+select * from category;
 
 SELECT * FROM item;

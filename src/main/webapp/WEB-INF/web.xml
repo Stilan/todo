@@ -13,7 +13,7 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>TodoServlet</servlet-name>
-    <url-pattern>/index</url-pattern>
+    <url-pattern>/index.do</url-pattern>
   </servlet-mapping>
   <servlet>
     <servlet-name>UpdateServlet</servlet-name>
@@ -27,6 +27,14 @@
     <servlet-name>RegServlet</servlet-name>
     <servlet-class>servlet.RegServlet</servlet-class>
   </servlet>
+  <servlet>
+    <servlet-name>CategoryServlet</servlet-name>
+    <servlet-class>servlet.CategoryServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>CategoryServlet</servlet-name>
+    <url-pattern>/category</url-pattern>
+  </servlet-mapping>
   <servlet-mapping>
     <servlet-name>RegServlet</servlet-name>
     <url-pattern>/reg.do</url-pattern>

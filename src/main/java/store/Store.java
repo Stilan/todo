@@ -1,5 +1,6 @@
 package store;
 
+import model.Category;
 import model.Item;
 import model.User;
 
@@ -14,4 +15,6 @@ public interface Store {
     Item findById(int id);
     User findByNameUser(String name);
     User addUser(User user);
+    List<Category> findAllCategory();
+    Item addNewCategory(Item item, String[] ids);
 }

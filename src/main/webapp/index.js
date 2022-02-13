@@ -6,7 +6,7 @@ function List() {
     let check = $("#filter").prop("checked");
     $.ajax({
         type: 'GET',
-        url: 'http://localhost:8080/todo_war_exploded/index',
+        url: 'http://localhost:8080/todo_war_exploded/index.do',
         dataType: 'json'
     }).done(function (data) {
         for (var item of data) {
@@ -17,7 +17,8 @@ function List() {
                 $('#tableId thead').after('<tr id="' + item.id + '"><td>' + '<input type="checkbox" id ="'
                     + item.id + '" onchange="update(id)">'
                     + '</td><td>' + item.description + '</td>'
-                    + '<td>' + item.user.name  + '</td></tr>')
+                    + '<td>' + item.user.name  + '</td>'
+                    + '<td>' + item.itemList[0].name + '</td></tr>')
             }
         } else {
                 for (var item of data) {
@@ -25,7 +26,8 @@ function List() {
                         $('#tableId thead').after('<tr id="' + item.id + '"><td>' + '<input type="checkbox" id ="'
                             + item.id + '" onchange="update(id)">'
                             + '</td><td>' + item.description + '</td>'
-                            + '<td>' + item.user.name  + '</td></tr>')
+                            + '<td>' + item.user.name  + '</td><'
+                            + '<td>' + item.itemList[0].name + '</td></tr>')
                 }
             }
         }
@@ -39,7 +41,7 @@ function List() {
  function getList() {
     $.ajax({
         type: 'GET',
-        url: 'http://localhost:8080/todo_war_exploded/index',
+        url: 'http://localhost:8080/todo_war_exploded/index.do',
         dataType: 'json'
     }).done(function (data) {
         for (var item of data) {
@@ -47,7 +49,8 @@ function List() {
                 $('#tableId thead').after('<tr id="' + item.id + '"><td>' + '<input type="checkbox" id ="'
                     + item.id + '" onchange="update(id)">'
                     + '</td><td>' + item.description + '</td>'
-                    + '<td>' + item.user.name + '</td></tr>')
+                    + '<td>' + item.user.name + '</td>'
+                    + '<td>' + item.itemList[0].name + '</td></tr>')
             }
         }
     }).fail(function (err) {
@@ -57,9 +60,10 @@ function List() {
 function add() {
     $.ajax({
         type: 'POST',
-        url: 'http://localhost:8080/todo_war_exploded/index',
+        url: 'http://localhost:8080/todo_war_exploded/index.do',
         data: {
-            description: $('#description').val()
+            description: $('#description').val(),
+            category: $('#category').val()
         },
         dataType: 'json'
     }).done(function (data) {
@@ -69,7 +73,8 @@ function add() {
                 $('#tableId thead').after('<tr id="' + data.id + '"><td>' + '<input type="checkbox" id ="'
                     + data.id + '" onchange="update(id)">'
                     + '</td><td>' + data.description + '</td>'
-                    + '<td>' + data.user.name + '</td></tr>')
+                    + '<td>' + data.user.name + '</td>'
+                    + '<td>' + data.itemList[0].name + '</td></tr>')
             }
         } else {
             alert("Зарегистрируйтесь")
@@ -100,5 +105,19 @@ function addRow() {
     }
 }
 
+$(document).ready(function () {
+    $.ajax({
+        type: 'GET',
+        url: 'http://localhost:8080/todo_war_exploded/category',
+        dataType: 'json'
+    }).done(function (data) {
+        for (var category of data) {
+            var r = "<option value=" + category.id + ">" + category.name + "</option>";
+            $('#category').append(r)
+        }
+    }).fail(function (err) {
+        console.log(err);
+    })
+});
 
 

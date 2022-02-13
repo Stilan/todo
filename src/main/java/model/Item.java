@@ -2,6 +2,8 @@ package model;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -18,6 +20,10 @@ public class Item {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    List<Category> itemList = new ArrayList<>();
 
 
     public Item(int id, String description, LocalDateTime created, boolean done, User user) {
@@ -78,6 +84,14 @@ public class Item {
         this.done = done;
     }
 
+    public List<Category> getItemList() {
+        return itemList;
+    }
+
+    public void setItemList(List<Category> itemList) {
+        this.itemList = itemList;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -103,5 +117,9 @@ public class Item {
                 + ", created=" + created
                 + ", done=" + done
                 + '}';
+    }
+
+    public void addCategory(Category category) {
+        this.itemList.add(category);
     }
 }

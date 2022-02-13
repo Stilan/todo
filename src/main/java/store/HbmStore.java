@@ -1,5 +1,6 @@
 package store;
 
+import model.Category;
 import model.Item;
 import model.User;
 import org.hibernate.Session;
@@ -10,6 +11,7 @@ import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.query.Query;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
 
@@ -57,12 +59,15 @@ public class HbmStore implements Store {
     @Override
     public Item replace(int id) {
         return this.tx(
-               session -> {
-                   session.createQuery("update model.Item set done = false where id = :id")
-                           .setParameter("id", id)
-                           .executeUpdate();
-                   return  session.get(Item.class, id);
-               }
+                session -> {
+                    session.createQuery("update model.Item set done = false where id = :id")
+                            .setParameter("id", id)
+                            .executeUpdate();
+
+                    Query<Item> query = session.createQuery(" from model.Item i join fetch i.itemList where i.id = :id");
+                            query.setParameter("id", id);
+                            return query.uniqueResult();
+                }
         );
     }
 
@@ -86,7 +91,7 @@ public class HbmStore implements Store {
     @Override
     public List<Item> findAll() {
         return this.tx(
-             session -> session.createQuery("from model.Item").list()
+                session -> session.createQuery("select distinct i from model.Item i join  fetch i.itemList").list()
         );
     }
 
@@ -94,7 +99,7 @@ public class HbmStore implements Store {
     public List<Item> findByName(String key) {
         return this.tx(
                 session -> {
-                    Query query =  session.createQuery("from model.Item where description = :descriptionKey");
+                    Query query = session.createQuery("from model.Item where description = :descriptionKey");
                     query.setParameter("descriptionKey", key);
                     return query.list();
                 }
@@ -105,15 +110,15 @@ public class HbmStore implements Store {
     public Item findById(int id) {
         return this.tx(
                 session ->
-                     session.get(Item.class, id)
+                        session.get(Item.class, id)
         );
     }
 
     @Override
     public User findByNameUser(String name) {
-          return  this.tx(
+        return this.tx(
                 session -> {
-                    Query query =  session.createQuery("from model.User where name = : nameUser");
+                    Query query = session.createQuery("from model.User where name = : nameUser");
                     query.setParameter("nameUser", name);
                     return (User) query.uniqueResult();
                 }
@@ -130,5 +135,22 @@ public class HbmStore implements Store {
         );
     }
 
+    @Override
+    public List<Category> findAllCategory() {
+        return this.tx(
+                session -> session.createQuery("select c from Category c", Category.class).list()
+        );
+    }
 
+    @Override
+    public Item addNewCategory(Item item, String[] categories) {
+        return this.tx(session -> {
+            for (var id : categories) {
+                Category category = session.find(Category.class, Integer.parseInt(id));
+                item.addCategory(category);
+            }
+            session.save(item);
+            return item;
+        });
+    }
 }

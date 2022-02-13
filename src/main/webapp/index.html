@@ -37,13 +37,20 @@
             </li>
         </ul>
     </div>
-    <div class="row">
+    <div class="card-body">
         <form>
             <div class="form-group">
                 <label for="description">Задание</label>
                 <input type="text" class="form-control" id="description">
             </div>
-            <button type="button" class="btn btn-success"  onclick="addRow(); add()">Загрузить</button>
+            <div class="form-group">
+            <label>Категория</label>
+                <select class="form-control" id="category"  required name="category">
+                </select>
+            </div>
+            <div class="form-group">
+            <button type="button" class="btn btn-success"   onclick="addRow(); add()">Загрузить</button>
+            </div>
         </form>
     </div>
     <br>

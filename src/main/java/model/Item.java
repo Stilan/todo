@@ -3,8 +3,9 @@ package model;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "item")
@@ -23,7 +24,7 @@ public class Item {
 
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    List<Category> itemList = new ArrayList<>();
+    private Set<Category> itemList = new HashSet<>();
 
 
     public Item(int id, String description, LocalDateTime created, boolean done, User user) {
@@ -84,11 +85,11 @@ public class Item {
         this.done = done;
     }
 
-    public List<Category> getItemList() {
+    public Set<Category> getItemList() {
         return itemList;
     }
 
-    public void setItemList(List<Category> itemList) {
+    public void setItemList(Set<Category> itemList) {
         this.itemList = itemList;
     }
 

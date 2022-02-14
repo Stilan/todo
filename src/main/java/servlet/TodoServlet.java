@@ -13,7 +13,11 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 public class TodoServlet extends HttpServlet {
 
@@ -34,7 +38,7 @@ public class TodoServlet extends HttpServlet {
         resp.setContentType("application/json; charset=utf-8");
         User user = (User) req.getSession().getAttribute("user");
         String[] c = req.getParameterValues("category");
-        Item it = new Item(req.getParameter("description"), LocalDateTime.now(), true,  user);
+        Item it = new Item(req.getParameter("description"), new Date(), true,  user);
         Item item = HbmStore.instOf().addNewCategory(it, c);
         OutputStream output = resp.getOutputStream();
         String json = GSON.toJson(item);

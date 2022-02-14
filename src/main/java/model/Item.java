@@ -2,10 +2,7 @@ package model;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "item")
@@ -15,7 +12,10 @@ public class Item {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String description;
-    private LocalDateTime created = LocalDateTime.now();
+
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date created;
+
     public boolean done;
 
     @ManyToOne
@@ -27,7 +27,7 @@ public class Item {
     private Set<Category> itemList = new HashSet<>();
 
 
-    public Item(int id, String description, LocalDateTime created, boolean done, User user) {
+    public Item(int id, String description, Date created, boolean done, User user) {
         this.id = id;
         this.description = description;
         this.created = created;
@@ -35,7 +35,7 @@ public class Item {
         this.user = user;
     }
 
-    public Item(String description, LocalDateTime created, boolean done, User user) {
+    public Item(String description, Date created, boolean done, User user) {
         this.description = description;
         this.created = created;
         this.done = done;
@@ -69,11 +69,11 @@ public class Item {
         this.description = description;
     }
 
-    public LocalDateTime getCreated() {
+    public Date getCreated() {
         return created;
     }
 
-    public void setCreated(LocalDateTime created) {
+    public void setCreated(Date created) {
         this.created = created;
     }
 
